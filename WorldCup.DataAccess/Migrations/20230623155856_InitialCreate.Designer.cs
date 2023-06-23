@@ -12,7 +12,7 @@ using WorldCup.DataAccess;
 namespace WorldCup.DataAccess.Migrations
 {
     [DbContext(typeof(WorldCupDbContext))]
-    [Migration("20230623141526_InitialCreate")]
+    [Migration("20230623155856_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -53,42 +53,27 @@ namespace WorldCup.DataAccess.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Draws");
-                });
-
-            modelBuilder.Entity("WorldCup.DataAccess.Entities.DrawDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DrawId")
-                        .HasColumnType("int");
-
                     b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupsCount")
                         .HasColumnType("int");
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("DrawId");
+                    b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("DrawDetails");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Draws");
                 });
 
             modelBuilder.Entity("WorldCup.DataAccess.Entities.Group", b =>
@@ -153,40 +138,29 @@ namespace WorldCup.DataAccess.Migrations
 
             modelBuilder.Entity("WorldCup.DataAccess.Entities.Draw", b =>
                 {
+                    b.HasOne("WorldCup.DataAccess.Entities.Group", "Group")
+                        .WithMany("Draws")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorldCup.DataAccess.Entities.Team", "Team")
+                        .WithMany("Draws")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WorldCup.DataAccess.Entities.User", "User")
                         .WithMany("Draws")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WorldCup.DataAccess.Entities.DrawDetail", b =>
-                {
-                    b.HasOne("WorldCup.DataAccess.Entities.Draw", "Draw")
-                        .WithMany()
-                        .HasForeignKey("DrawId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WorldCup.DataAccess.Entities.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WorldCup.DataAccess.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Draw");
-
                     b.Navigation("Group");
 
                     b.Navigation("Team");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WorldCup.DataAccess.Entities.Team", b =>
@@ -198,6 +172,16 @@ namespace WorldCup.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("WorldCup.DataAccess.Entities.Group", b =>
+                {
+                    b.Navigation("Draws");
+                });
+
+            modelBuilder.Entity("WorldCup.DataAccess.Entities.Team", b =>
+                {
+                    b.Navigation("Draws");
                 });
 
             modelBuilder.Entity("WorldCup.DataAccess.Entities.User", b =>

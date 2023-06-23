@@ -9,7 +9,7 @@ namespace WorldCup.DataAccess.DI
         public static IServiceCollection AddDataAccessModule(this IServiceCollection services)
         {
             services.AddDbContext<WorldCupDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
-            services.AddScoped<IDrawRepository, DrawRepository>();
+            services.AddSingleton<WorldCupDbUoW>();
             return services;
         }
     }

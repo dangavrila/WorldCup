@@ -78,11 +78,26 @@ namespace WorldCup.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    GroupsCount = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Draws", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Draws_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Draws_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Draws_User_UserId",
                         column: x => x.UserId,
@@ -91,52 +106,14 @@ namespace WorldCup.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "DrawDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DrawId = table.Column<int>(type: "int", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DrawDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DrawDetails_Draws_DrawId",
-                        column: x => x.DrawId,
-                        principalTable: "Draws",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DrawDetails_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DrawDetails_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_DrawDetails_DrawId",
-                table: "DrawDetails",
-                column: "DrawId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DrawDetails_GroupId",
-                table: "DrawDetails",
+                name: "IX_Draws_GroupId",
+                table: "Draws",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DrawDetails_TeamId",
-                table: "DrawDetails",
+                name: "IX_Draws_TeamId",
+                table: "Draws",
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
@@ -153,9 +130,6 @@ namespace WorldCup.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "DrawDetails");
-
             migrationBuilder.DropTable(
                 name: "Draws");
 

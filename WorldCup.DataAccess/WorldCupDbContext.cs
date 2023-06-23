@@ -9,7 +9,6 @@ namespace WorldCup.DataAccess
         public DbSet<Team> Teams { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Draw> Draws { get; set; }
-        public DbSet<DrawDetail> DrawDetails { get; set; }
 
         public WorldCupDbContext(DbContextOptions<WorldCupDbContext> options) : base(options) { }
 
