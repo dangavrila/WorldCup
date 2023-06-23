@@ -26,7 +26,7 @@ namespace WorldCup.WebAPI.Controllers
         }
 
         [HttpPost(Name = "DrawGroups")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(DrawGroupsResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> DrawGroups(DrawGroupsRequest request)
@@ -34,7 +34,7 @@ namespace WorldCup.WebAPI.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if(request.GroupCount != 4 || request.GroupCount != 8)
+            if(request.GroupCount != 4 && request.GroupCount != 8)
                 return UnprocessableEntity();
 
             if(request.User == null)
@@ -46,7 +46,7 @@ namespace WorldCup.WebAPI.Controllers
         }
 
         [HttpGet(Name = "GetLeagueGroups")]
-        [ProducesResponseType(typeof(IEnumerable<PlacementResults>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DrawGroupsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetGroups()
         {

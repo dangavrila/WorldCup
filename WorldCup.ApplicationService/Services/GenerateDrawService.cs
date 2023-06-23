@@ -6,7 +6,7 @@ namespace WorldCup.ApplicationService.Services
 {
     public interface IGenerateDrawService
     {
-        Task<PlacementResults> DrawGroups(int groupCount, string firstName, string surname);
+        Task<DrawGroupsResponse> DrawGroups(int groupCount, string firstName, string surname);
     }
 
     public class GenerateDrawService : IGenerateDrawService
@@ -20,9 +20,9 @@ namespace WorldCup.ApplicationService.Services
             
         }
 
-        public async Task<PlacementResults> DrawGroups(int groupCount, string firstName, string surname)
+        public async Task<DrawGroupsResponse> DrawGroups(int groupCount, string firstName, string surname)
         {
-            PlacementResults drawResult = null!;
+            DrawGroupsResponse drawGroupsResponse = null!;
             var userEntity = new User()
             {
                 FirstName = firstName,
@@ -33,22 +33,28 @@ namespace WorldCup.ApplicationService.Services
             using (_dbUoW)
             {
                 var groups = await _dbUoW.GroupsRepository.GetAsync();
-                var groupsArray = groups
-                    .Select(g => g.Id)
+                var groupsDic = groups
                     .Take(groupCount)
-                    .ToArray();
+                    .ToDictionary(g => g.Id);
 
                 var teams = await _dbUoW.TeamsRepository.GetAsync();
-                var teamsArray = teams
-                    .Select(t => t.Id)
-                    .ToArray();
+                var teamsDic = teams
+                    .ToDictionary(t => t.Id);
 
-                drawResult = _teamPlacementService.PlaceTeamsInGroups(teamsArray, groupsArray, groupCount);
+                var placementResults = _teamPlacementService.PlaceTeamsInGroups(teamsDic.Keys.ToArray(), groupsDic.Keys.ToArray(), groupCount);
 
-                foreach(var groupId in drawResult.Groups.Keys)
+                drawGroupsResponse = new DrawGroupsResponse();
+
+                foreach (var groupId in placementResults.Groups.Keys)
                 {
-                    foreach(var teamId in drawResult.Groups[groupId].TeamIds)
+                    var groupModel = new GroupModel()
                     {
+                        GroupName = groupsDic[groupId].Name
+                    };
+
+                    foreach(var teamId in placementResults.Groups[groupId].TeamIds)
+                    {
+                        groupModel.Teams.Add(new Name(teamsDic[teamId].Name));
                         var newDraw = new Draw()
                         {
                             CreatedOn = currentDate,
@@ -60,12 +66,14 @@ namespace WorldCup.ApplicationService.Services
 
                         _dbUoW.DrawsRepository.Insert(newDraw);
                     }
+
+                    drawGroupsResponse.Groups.Add(groupModel);
                 }
 
                 await _dbUoW.SaveAsync();
             }
             
-            return drawResult;
+            return drawGroupsResponse;
         }
     }
 }
