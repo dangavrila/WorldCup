@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorldCup.ApplicationService\WorldCup.ApplicationService.csproj" />
-    <ProjectReference Include="..\WorldCup.DataAccess\WorldCup.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

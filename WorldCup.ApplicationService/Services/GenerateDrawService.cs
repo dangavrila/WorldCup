@@ -35,6 +35,7 @@ namespace WorldCup.ApplicationService.Services
                 var groups = await _dbUoW.GroupsRepository.GetAsync();
                 var groupsArray = groups
                     .Select(g => g.Id)
+                    .Take(groupCount)
                     .ToArray();
 
                 var teams = await _dbUoW.TeamsRepository.GetAsync();
@@ -44,9 +45,9 @@ namespace WorldCup.ApplicationService.Services
 
                 drawResult = _teamPlacementService.PlaceTeamsInGroups(teamsArray, groupsArray, groupCount);
 
-                foreach(var group in drawResult.Groups)
+                foreach(var groupId in drawResult.Groups.Keys)
                 {
-                    foreach(var teamId in group.TeamIds)
+                    foreach(var teamId in drawResult.Groups[groupId].TeamIds)
                     {
                         var newDraw = new Draw()
                         {
@@ -54,7 +55,7 @@ namespace WorldCup.ApplicationService.Services
                             User = userEntity,
                             GroupsCount = groupCount,
                             TeamId = teamId,
-                            GroupId = group.Id
+                            GroupId = groupId
                         };
 
                         _dbUoW.DrawsRepository.Insert(newDraw);
