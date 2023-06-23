@@ -19,7 +19,7 @@ namespace WorldCup.Tests
         [Test]
         public async Task FourGroupsTest()
         {
-            var result = await SUT.GetDrawResult(4, "First", "Last");
+            var result = await SUT.DrawGroups(4, "First", "Last");
 
             Assert.IsNotNull(result);
         }

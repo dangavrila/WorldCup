@@ -8,6 +8,7 @@ namespace WorldCup.ApplicationService.DI
         public static IServiceCollection AddApplicationServiceModule(this IServiceCollection services)
         {
             services.AddTransient<IGenerateDrawService, GenerateDrawService>();
+            services.AddTransient<IQueryLeageGroupsService, QueryLeageGroupsService>();
 
             return services;
         }
