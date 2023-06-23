@@ -46,7 +46,7 @@ namespace WorldCup.WebAPI.Controllers
         }
 
         [HttpGet(Name = "GetLeagueGroups")]
-        [ProducesResponseType(typeof(IEnumerable<DrawResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PlacementResults>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetGroups()
         {

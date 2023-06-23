@@ -4,16 +4,16 @@ namespace WorldCup.ApplicationService.Services
 {
     public interface ITeamPlacementService
     {
-        DrawResult PlaceTeamsInGroups(int[] teamIds, int[] groupIds, int groupCount);
+        PlacementResults PlaceTeamsInGroups(int[] teamIds, int[] groupIds, int groupCount);
     }
     public class TeamPlacementService : ITeamPlacementService
     {
-        public DrawResult PlaceTeamsInGroups(int[] teamIds, int[] groupIds, int groupCount)
+        public PlacementResults PlaceTeamsInGroups(int[] teamIds, int[] groupIds, int groupCount)
         {
             int totalRounds = teamIds.Length / groupCount;
             int totalDraws = 0;
 
-            DrawResult drawResult = new DrawResult(groupIds);
+            PlacementResults drawResult = new PlacementResults(groupIds);
 
             for (int i = 0; i < totalRounds; i++)
             {
