@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using WorldCup.ApplicationService.DI;
+using WorldCup.DataAccess;
 
 namespace WorldCup.WebAPI
 {
