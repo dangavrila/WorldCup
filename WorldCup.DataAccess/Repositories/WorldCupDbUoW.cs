@@ -24,9 +24,9 @@ namespace WorldCup.DataAccess.Repositories
 
         public GenericRepository<Country> CountriesRepository => _countriesRepository;
 
-        public GenericRepository<Team> TeamsRepository => _teamsRepository;
+        public virtual GenericRepository<Team> TeamsRepository => _teamsRepository;
 
-        public GenericRepository<Group> GroupsRepository => _groupsRepository;
+        public virtual GenericRepository<Group> GroupsRepository => _groupsRepository;
 
         public GenericRepository<User> UsersRepository => _usersRepository;
 

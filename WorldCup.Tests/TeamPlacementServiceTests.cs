@@ -1,37 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using WorldCup.ApplicationService.Services;
 using WorldCup.DataAccess.Entities;
 
-namespace WorldCup.DataAccess
+namespace WorldCup.Tests
 {
-    public class WorldCupDbContext: DbContext
+    internal class TeamPlacementServiceTests
     {
-        public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<Team> Teams { get; set; }
-        public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<Draw> Draws { get; set; }
-
-        public WorldCupDbContext(DbContextOptions<WorldCupDbContext> options) : base(options) { }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        private readonly ITeamPlacementService SUT;
+        private IEnumerable<DataAccess.Entities.Group> _groups;
+        private IEnumerable<Team> _teams;
+        public TeamPlacementServiceTests()
         {
-            //SeedData(modelBuilder);
-
-            base.OnModelCreating(modelBuilder);
+            SUT = new TeamPlacementService();
         }
 
-        private void SeedData(ModelBuilder modelBuilder)
+        [SetUp]
+        public void Init()
         {
-            modelBuilder.Entity<Country>().HasData(
-                new Country() { Id = 1, Name = "Germany" },
-                new Country() { Id = 2, Name = "Turkey" },
-                new Country() { Id = 3, Name = "France" },
-                new Country() { Id = 4, Name = "Netherlands" },
-                new Country() { Id = 5, Name = "Portugal" },
-                new Country() { Id = 6, Name = "Italy" },
-                new Country() { Id = 7, Name = "Spain" },
-                new Country() { Id = 8, Name = "Belgium" });
+            _groups = new List<DataAccess.Entities.Group>() {
+                new DataAccess.Entities.Group() { Id = 1, Name = "A"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "B"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "C"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "D"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "E"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "F"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "G"},
+                new DataAccess.Entities.Group() { Id = 1, Name = "H"}};
 
-            modelBuilder.Entity<Team>().HasData(
+            _teams = new List<Team>() {
                 new Team() { Id = 1, Name = "Adesso Berlin", CountryId = 1 },
                 new Team() { Id = 2, Name = "Adesso Frankfurt", CountryId = 1 },
                 new Team() { Id = 3, Name = "Adesso Munich", CountryId = 1 },
@@ -63,18 +58,15 @@ namespace WorldCup.DataAccess
                 new Team() { Id = 29, Name = "Adesso Brussel", CountryId = 8 },
                 new Team() { Id = 30, Name = "Adesso Bruges", CountryId = 8 },
                 new Team() { Id = 31, Name = "Adesso Gent", CountryId = 8 },
-                new Team() { Id = 32, Name = "Adesso Antwerp", CountryId = 8 }
-            );
+                new Team() { Id = 32, Name = "Adesso Antwerp", CountryId = 8 }};
+        }
 
-            modelBuilder.Entity<Group>().HasData(
-                new { Id = 1, Name = "A" },
-                new { Id = 2, Name = "B" },
-                new { Id = 3, Name = "C" },
-                new { Id = 4, Name = "D" },
-                new { Id = 5, Name = "E" },
-                new { Id = 6, Name = "F" },
-                new { Id = 7, Name = "G" },
-                new { Id = 8, Name = "H" });
+        [Test]
+        public void FourGroupsTest()
+        {
+            var result = SUT.PlaceTeamsInGroups(_teams.Select(x => x.Id).ToArray(), _groups.Select(x => x.Id).ToArray(), 4);
+
+            Assert.IsNotNull(result);
         }
     }
 }

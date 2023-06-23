@@ -2,12 +2,13 @@
 {
     public class DrawResult
     {
-        public IEnumerable<Group> Groups { get; set; }
+        public IEnumerable<Group> Groups { get; }
+        public int TotalDraws { get; }
     }
 
     public class Group
     {
-        public string Name { get; set; }
-        public IEnumerable<string> Teams { get; set; }
+        public int Id { get; }
+        public IEnumerable<int> TeamIds { get; }
     }
 }

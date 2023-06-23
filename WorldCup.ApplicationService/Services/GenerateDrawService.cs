@@ -12,14 +12,17 @@ namespace WorldCup.ApplicationService.Services
     public class GenerateDrawService : IGenerateDrawService
     {
         private readonly WorldCupDbUoW _dbUoW;
-        public GenerateDrawService(WorldCupDbUoW worldCupDbUoW)
+        private readonly ITeamPlacementService _teamPlacementService;
+        public GenerateDrawService(WorldCupDbUoW worldCupDbUoW, ITeamPlacementService teamPlacementService)
         {
             _dbUoW = worldCupDbUoW ?? throw new ArgumentNullException(nameof(worldCupDbUoW));
+            _teamPlacementService = teamPlacementService ?? throw new ArgumentNullException(nameof(_teamPlacementService));
+            
         }
 
         public async Task<DrawResult> DrawGroups(int groupCount, string firstName, string surname)
         {
-            var groupsDic = new Dictionary<int, DataAccess.Entities.Group>();
+            DrawResult drawResult = null!;
             var userEntity = new User()
             {
                 FirstName = firstName,
@@ -30,33 +33,38 @@ namespace WorldCup.ApplicationService.Services
             using (_dbUoW)
             {
                 var groups = await _dbUoW.GroupsRepository.GetAsync();
-                groupsDic = groups.ToDictionary(s => s.Id);
+                var groupsArray = groups
+                    .Select(g => g.Id)
+                    .ToArray();
 
                 var teams = await _dbUoW.TeamsRepository.GetAsync();
-                var teamsArray = teams.ToArray();
+                var teamsArray = teams
+                    .Select(t => t.Id)
+                    .ToArray();
 
-                int totalRounds = groupsDic.Count / groupCount;
-                int totalDraws = totalRounds * groupCount;
+                drawResult = _teamPlacementService.PlaceTeamsInGroups(teamsArray, groupsArray, groupCount);
 
-                for (int i = 0; i < totalDraws; i++)
+                foreach(var group in drawResult.Groups)
                 {
-                    var newDraw = new Draw()
+                    foreach(var teamId in group.TeamIds)
                     {
-                        CreatedOn = currentDate,
-                        User = userEntity,
-                        GroupsCount = groupCount,
-                        GroupId = i + 1,
-                    };
+                        var newDraw = new Draw()
+                        {
+                            CreatedOn = currentDate,
+                            User = userEntity,
+                            GroupsCount = groupCount,
+                            TeamId = teamId,
+                            GroupId = group.Id
+                        };
 
-                    _dbUoW.DrawsRepository.Insert(newDraw);
+                        _dbUoW.DrawsRepository.Insert(newDraw);
+                    }
                 }
 
                 await _dbUoW.SaveAsync();
             }
             
-            //TODO: map Draw entity to DrawResult
-
-            return new DrawResult();
+            return drawResult;
         }
     }
 }
