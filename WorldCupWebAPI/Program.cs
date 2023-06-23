@@ -1,3 +1,5 @@
+using WorldCup.ApplicationService.DI;
+
 namespace WorldCup.WebAPI
 {
     public class Program
@@ -12,6 +14,7 @@ namespace WorldCup.WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddApplicationServiceModule();
 
             var app = builder.Build();
 

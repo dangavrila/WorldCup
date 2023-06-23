@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldCup.ApplicationService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldCup.DataAccess", "..\WorldCup.DataAccess\WorldCup.DataAccess.csproj", "{96CD0ECC-0CAC-41E3-ACFD-C7AAC14493AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.Tests", "04.Tests", "{634B4179-A8D9-4593-8A02-7D606A50546C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldCup.Tests", "..\WorldCup.Tests\WorldCup.Tests.csproj", "{CC23127F-375C-4125-A365-0737D660AA5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,10 @@ Global
 		{96CD0ECC-0CAC-41E3-ACFD-C7AAC14493AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96CD0ECC-0CAC-41E3-ACFD-C7AAC14493AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96CD0ECC-0CAC-41E3-ACFD-C7AAC14493AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC23127F-375C-4125-A365-0737D660AA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC23127F-375C-4125-A365-0737D660AA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC23127F-375C-4125-A365-0737D660AA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC23127F-375C-4125-A365-0737D660AA5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 		{29E32D11-FF17-4E6C-A212-669147743114} = {23B651E3-AB58-4E27-BF44-763351C55E7B}
 		{C5025B0F-457C-4C88-B7EE-F6C88068116D} = {5BFC5A39-580C-43D4-99FD-BFEDA1C912A7}
 		{96CD0ECC-0CAC-41E3-ACFD-C7AAC14493AD} = {2518C5FF-9004-4FAF-BE05-DD13C9DE07EC}
+		{CC23127F-375C-4125-A365-0737D660AA5E} = {634B4179-A8D9-4593-8A02-7D606A50546C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F217D106-3859-4A8F-BEBF-E6B51D168F0F}
