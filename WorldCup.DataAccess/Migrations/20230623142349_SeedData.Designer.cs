@@ -12,7 +12,7 @@ using WorldCup.DataAccess;
 namespace WorldCup.DataAccess.Migrations
 {
     [DbContext(typeof(WorldCupDbContext))]
-    [Migration("20230623134041_SeedData")]
+    [Migration("20230623142349_SeedData")]
     partial class SeedData
     {
         /// <inheritdoc />

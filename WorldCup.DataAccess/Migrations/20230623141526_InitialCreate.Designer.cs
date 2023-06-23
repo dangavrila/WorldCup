@@ -12,7 +12,7 @@ using WorldCup.DataAccess;
 namespace WorldCup.DataAccess.Migrations
 {
     [DbContext(typeof(WorldCupDbContext))]
-    [Migration("20230623131625_InitialCreate")]
+    [Migration("20230623141526_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
