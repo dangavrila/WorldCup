@@ -54,7 +54,7 @@ namespace WorldCup.ApplicationService.Services
 
                     foreach(var teamId in placementResults.Groups[groupId].TeamIds)
                     {
-                        groupModel.Teams.Add(new Name(teamsDic[teamId].Name));
+                        groupModel.AddTeam(new Name(teamsDic[teamId].Name));
                         var newDraw = new Draw()
                         {
                             CreatedOn = currentDate,
@@ -67,7 +67,7 @@ namespace WorldCup.ApplicationService.Services
                         _dbUoW.DrawsRepository.Insert(newDraw);
                     }
 
-                    drawGroupsResponse.Groups.Add(groupModel);
+                    drawGroupsResponse.AddGroup(groupModel);
                 }
 
                 await _dbUoW.SaveAsync();

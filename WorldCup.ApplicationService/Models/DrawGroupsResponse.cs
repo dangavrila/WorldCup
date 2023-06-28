@@ -2,13 +2,25 @@
 {
     public class DrawGroupsResponse
     {
-        public List<GroupModel> Groups { get; set; } = new List<GroupModel>();
+        private readonly List<GroupModel> _groups = new List<GroupModel>();
+        public IEnumerable<GroupModel> Groups => _groups;
+
+        public void AddGroup(GroupModel group)
+        {
+            _groups.Add(group);
+        }
     }
 
     public class GroupModel
     {
-        public string GroupName { get; set; }
-        public List<Name> Teams { get; set; } = new List<Name>();
+        private readonly List<Name> _teams = new List<Name>();
+        public string? GroupName { get; set; }
+        public IEnumerable<Name> Teams => _teams;
+
+        public void AddTeam(Name name)
+        {
+            _teams.Add(name);
+        }
     }
 
     public record struct Name(string name);
